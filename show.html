@@ -8,16 +8,25 @@
         </style>
     </head>
     <body>
-        <button type="button" onclick="getImgUrl()">显示最小的50张图片</button>
+        <button type="button" onclick="getImgUrl('/getimgurl')">显示最小的100张图片</button>
+        <button type="button" onclick="getImgUrl('/getimgurl?rand=1')">随机显示100张图片</button>
         <div id="images"></div>
     </body>
     <script>
+    function delImage() {
+        var div = document.getElementById("images");
+        while(div.hasChildNodes()) {
+            div.removeChild(div.firstChild);
+        }
+    }
+
     function addImage(url){ // 插入新的图片
         image = document.createElement("img");
         image.setAttribute("src", url);
         document.getElementById("images").appendChild(image);
     }
-    function getImgUrl() {
+
+    function getImgUrl(path) {
         var xmlhttp;
         if (window.XMLHttpRequest) {
             // 非ie内核浏览器的请求
@@ -32,10 +41,9 @@
                 //      2: HEADERS_RECEIVED
                 //      3: LOADING ,      4: DONE
                 if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-                    //console.log(xmlhttp.responseText);
+                    delImage();
                     var obj =JSON.parse(xmlhttp.responseText);
                     for (var i=0; i<obj.length;i++) {
-                        //console.log(obj[i]);
                         var url = host + obj[i];
                         addImage(url);
                     }
@@ -43,8 +51,7 @@
                     console.log("ssssssss");
                 }
             }
-        xmlhttp.open("GET", "/getimgurl", true);
-        //xmlhttp.open("GET", "http://127.0.0.1/popup?slot=111", true);
+        xmlhttp.open("GET", path, true);
         xmlhttp.send();
     }
     </script>

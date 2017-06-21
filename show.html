@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>浏览图片</title>
+        <meta charset="utf-8">
+        <style>
+            img {width: 200px}
+        </style>
+    </head>
+    <body>
+        <button type="button" onclick="getImgUrl()">显示最小的50张图片</button>
+        <div id="images"></div>
+    </body>
+    <script>
+    function addImage(url){ // 插入新的图片
+        image = document.createElement("img");
+        image.setAttribute("src", url);
+        document.getElementById("images").appendChild(image);
+    }
+    function getImgUrl() {
+        var xmlhttp;
+        if (window.XMLHttpRequest) {
+            // 非ie内核浏览器的请求
+            xmlhttp = new XMLHttpRequest();
+        } else {
+            // ie内核浏览器请求
+        }
+        var host="http://image2.cloudmobi.net/peep/picture/"
+            xmlhttp.onreadystatechange=function() {
+                // readyState:
+                //      0: UNSENT ,      1: OPEND
+                //      2: HEADERS_RECEIVED
+                //      3: LOADING ,      4: DONE
+                if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+                    //console.log(xmlhttp.responseText);
+                    var obj =JSON.parse(xmlhttp.responseText);
+                    for (var i=0; i<obj.length;i++) {
+                        //console.log(obj[i]);
+                        var url = host + obj[i];
+                        addImage(url);
+                    }
+                } else {
+                    console.log("ssssssss");
+                }
+            }
+        xmlhttp.open("GET", "/getimgurl", true);
+        //xmlhttp.open("GET", "http://127.0.0.1/popup?slot=111", true);
+        xmlhttp.send();
+    }
+    </script>
+</html>

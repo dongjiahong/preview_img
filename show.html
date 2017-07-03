@@ -8,7 +8,7 @@
         </style>
     </head>
     <body>
-        <button type="button" onclick="getImgUrl('/getimgurl')">显示最小的100张图片</button>
+        <button type="button" onclick="getImgUrl('http://127.0.0.1/getimgurl')">显示最小的100张图片</button>
         <button type="button" onclick="getImgUrl('/getimgurl?rand=1')">随机显示100张图片</button>
         <div id="images"></div>
     </body>
@@ -20,10 +20,18 @@
         }
     }
 
-    function addImage(url){ // 插入新的图片
+    function addImage(url, id){ // 插入新的图片
         image = document.createElement("img");
         image.setAttribute("src", url);
-        document.getElementById("images").appendChild(image);
+        image.setAttribute("id", id);
+        var child = document.getElementById("images").appendChild(image);
+        child.onclick = function() {
+            if(confirm("需要删除 "+id+" 这张图片？")) {
+                alert("ok")
+            } else {
+                alert("on")
+            }
+        };
     }
 
     function getImgUrl(path) {
@@ -34,7 +42,7 @@
         } else {
             // ie内核浏览器请求
         }
-        var host="http://image2.cloudmobi.net/peep/picture/"
+        var host="http://127.0.0.1/show/image/"
             xmlhttp.onreadystatechange=function() {
                 // readyState:
                 //      0: UNSENT ,      1: OPEND
@@ -45,7 +53,7 @@
                     var obj =JSON.parse(xmlhttp.responseText);
                     for (var i=0; i<obj.length;i++) {
                         var url = host + obj[i];
-                        addImage(url);
+                        addImage(url, obj[i]);
                     }
                 } else {
                     console.log("ssssssss");
